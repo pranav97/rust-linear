@@ -1,7 +1,7 @@
 use std::io;
-use std::time;
 extern crate num_cpus;
 use std::sync::mpsc::channel;
+use std::time::Instant;
 
 macro_rules! get_ind {
     ($cur_row: expr, $cur_col: expr, $num_rows: expr) => (($num_rows * $cur_col) + $cur_row);
@@ -210,9 +210,9 @@ fn main() {
         println!("Matrix Multiplication not possible");
         return;
     }
-    let now = time::Instant::now();
+    let start = Instant::now();
     let m3 = row_split_multiply(m1, m2);
-    println!("Time taken by multiplication: {} microseconds", now.elapsed().as_micros());
+    println!("Time taken by multiplication: {} microseconds", start.elapsed().as_micros());
 
     // let m3_ptr:&Matrix = &m3;
     println!("Product is: ");

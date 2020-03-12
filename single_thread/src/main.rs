@@ -1,5 +1,7 @@
 use std::io;
-use std::time;
+use std::time::Instant;
+
+
 
 
 macro_rules! get_ind {
@@ -135,9 +137,13 @@ fn main() {
         println!("Matrix Multiplication not possible");
         return;
     }
-    let now = time::Instant::now();
+
+    let start = Instant::now();
     let m3 = multiply_single_thread(m1_ptr, m2_ptr);
-    println!("Time taken by multiplication: {} microseconds", now.elapsed().as_micros());
+    println!("Time taken by multiplication: {} microseconds", start.elapsed().as_micros());
+
+
+    
 
     let m3_ptr:&Matrix = &m3;
     println!("Product is: ");
