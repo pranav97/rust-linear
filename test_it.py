@@ -2,6 +2,7 @@ import re
 import numpy as np
 import sys
 import subprocess
+import csv
 
 
 class MatrixTester(object):
@@ -75,9 +76,9 @@ class MatrixTester(object):
         input_text = self.get_input_text(row1, col1, mat)
         input_text += self.get_input_text(row2, col2, mat2)
 
-        cmd = ['cargo', 'run', '--quiet', '--bin', 'multi_thread']
+        cmd = ["target/debug/multi_thread"]
         if single_thread:
-            cmd[-1] = 'single_thread'
+            cmd[-1] = 'target/debug/single_thread'
         proc = subprocess.Popen(cmd,
                                 stdin=subprocess.PIPE,
                                 stdout=subprocess.PIPE
@@ -118,20 +119,29 @@ class MatrixTester(object):
     def performance_mult(self):
         print("\n\nMult tests")
         num_rows = [500,
-                    1000
+                    1000,
+                    1500,
+                    2000
                     ]
-        for i in range(len(num_rows)):
-            print("Test {}: {} rows and cols".format(i, num_rows[i]))
-            ret = self.mult_test(
-                num_rows[i], num_rows[i], num_rows[i], num_rows[i],
-                perf_test=True, single_thread=True)
-            print("Single Thread: {} microseconds".format(ret))
-            speed = self.mult_test(
-                num_rows[i], num_rows[i], num_rows[i], num_rows[i],
-                perf_test=True)
-            print("Multi  Thread: {} microseconds".format(speed))
-            up = float(ret/speed)
-            print("* {} x speedup".format(up))
+        f = open('speedup.csv', 'w')
+        with f:
+            fnames = ['num_rows','single', 'multi', 'speedup']
+            writer = csv.DictWriter(f, fieldnames=fnames)    
+            writer.writeheader()
+            for i in range(len(num_rows)):
+                print("Test {}: {} rows and cols".format(i, num_rows[i]))
+                ret = self.mult_test(
+                    num_rows[i], num_rows[i], num_rows[i], num_rows[i],
+                    perf_test=True, single_thread=True)
+                print("Single Thread: {} microseconds".format(ret))
+                speed = self.mult_test(
+                    num_rows[i], num_rows[i], num_rows[i], num_rows[i],
+                    perf_test=True)
+                print("Multi  Thread: {} microseconds".format(speed))
+                up = float(ret/speed)
+                print("* {} x speedup".format(up))
+                writer.writerow({'num_rows':num_rows[i], 'single' : ret, 'multi': speed, 'speedup': up})
+
 
 def run_performance_tests():
     print("\n\nRunning Performance tests")
