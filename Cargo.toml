@@ -1,0 +1,7 @@
+[workspace]
+
+# Optional key, inferred from path dependencies if not present.
+# Additional non-path dependencies that should be included must be given here.
+# In particular, for a virtual manifest, all members have to be listed.
+members = ["multi_thread", "single_thread"]
+
