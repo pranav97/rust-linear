@@ -76,9 +76,9 @@ class MatrixTester(object):
         input_text = self.get_input_text(row1, col1, mat)
         input_text += self.get_input_text(row2, col2, mat2)
 
-        cmd = ["target/debug/multi_thread"]
+        cmd = ["target/release/multi_thread"]
         if single_thread:
-            cmd[-1] = 'target/debug/single_thread'
+            cmd[-1] = 'target/release/single_thread'
         proc = subprocess.Popen(cmd,
                                 stdin=subprocess.PIPE,
                                 stdout=subprocess.PIPE
